@@ -45,14 +45,9 @@ export const getTransactionsPaginated = ({
 export const getTransactionsByEmployee = ({ employeeId }: RequestByEmployeeParams) => {
   if (!employeeId) {
     throw new Error("Employee id cannot be empty")
-  } else if (employeeId === "all") {
-    return data.transactions
-  } else {
-    return data.transactions.filter((transaction) => transaction.employee.id === employeeId)
   }
-  // For Bug 3: Returns all transactions when employeeId strictly equals "all".
   
-  //#region - Further detailed explanation - 
+  return data.transactions.filter((transaction) => transaction.employee.id === employeeId)
   /*I initially solved this bug by returning all transactions when employeeId is null. 
   I figured a cleaner way would be to change the id when selecting "All Employees" to "all" and handling the data accordingly. 
   This allows the null id error handling to stay in place.*/
