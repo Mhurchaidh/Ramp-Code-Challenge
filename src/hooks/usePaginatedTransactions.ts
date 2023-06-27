@@ -13,7 +13,7 @@ export function usePaginatedTransactions(): PaginatedTransactionsResult {
     const response = await fetchWithCache<PaginatedResponse<Transaction[]>, PaginatedRequestParams>(
       "paginatedTransactions",
       {
-        page: paginatedTransactions === null ? 0 : paginatedTransactions.nextPage,
+        page: paginatedTransactions === null ? 1 : paginatedTransactions.nextPage, /*For Bug 4: defaulting page to 1 rather than 0*/
       }
     )
 
