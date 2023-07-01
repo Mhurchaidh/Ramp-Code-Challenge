@@ -24,11 +24,14 @@ export const getTransactionsPaginated = ({
     throw new Error("Page cannot be null")
   }
 
+  //#region -ORIGINAL START AND END VALUES-
   // const start = page * TRANSACTIONS_PER_PAGE
   // const end = start + TRANSACTIONS_PER_PAGE
+  //#endregion
+  
   const start = 0
   const end = page * TRANSACTIONS_PER_PAGE
-  //Bug 4 solved
+  //Bug 4 solved by setting "start" to 0 index with "end" incrementing with page.
 
   if (start > data.transactions.length) {
     throw new Error(`Invalid page ${page}`)
@@ -48,10 +51,6 @@ export const getTransactionsByEmployee = ({ employeeId }: RequestByEmployeeParam
   }
   
   return data.transactions.filter((transaction) => transaction.employee.id === employeeId)
-  /*I initially solved this bug by returning all transactions when employeeId is null. 
-  I figured a cleaner way would be to change the id when selecting "All Employees" to "all" and handling the data accordingly. 
-  This allows the null id error handling to stay in place.*/
-  //#endregion
 }
 
 export const setTransactionApproval = ({ transactionId, value }: SetTransactionApprovalParams): void => {

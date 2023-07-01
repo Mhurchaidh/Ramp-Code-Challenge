@@ -22,7 +22,7 @@ export function App() {
   const loadAllTransactions = useCallback(async () => {
     setIsLoading(true)
     transactionsByEmployeeUtils.invalidateData()
-
+    
     await employeeUtils.fetchAll()
     setIsLoading(false)
     //Bug 5 solved: isLoading wasn't being set to false until after the promise for the line below was fulfilled.
@@ -64,13 +64,12 @@ export function App() {
           onChange={async (newValue) => {
             if (newValue === null) {
               return
-            }
-
-            if (newValue.id === "") {
+            } else if (newValue.id === "") {
               await loadAllTransactions()
             } else {
               await loadTransactionsByEmployee(newValue.id)
             }
+            //Bug 3 was solved by loading all transactions if id is an empty string.
           }}
         />
 
@@ -83,7 +82,8 @@ export function App() {
             <button
               className="RampButton"
               disabled={paginatedTransactionsUtils.loading || 
-                        paginatedTransactions === null}
+                        paginatedTransactions === null ||
+                        paginatedTransactions.nextPage === null}//Bug 6 was fixed by adding the last two OR conditions for disabling the button. 
               onClick={async () => {
                 await loadAllTransactions()
               }}

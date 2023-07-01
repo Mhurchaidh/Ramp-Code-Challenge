@@ -4,12 +4,15 @@ import { TransactionsByEmployeeResult } from "./types"
 import { useCustomFetch } from "./useCustomFetch"
 
 export function useTransactionsByEmployee(): TransactionsByEmployeeResult {
-  const { fetchWithCache, loading } = useCustomFetch()
+  const { fetchWithoutCache, loading } = useCustomFetch()
   const [transactionsByEmployee, setTransactionsByEmployee] = useState<Transaction[] | null>(null)
 
   const fetchById = useCallback(
     async (employeeId: string) => {
-      const data = await fetchWithCache<Transaction[], RequestByEmployeeParams>(
+      //Bug 7 solved by forcing app to fetchWithoutCache. 
+      //I know there's a cleaner way to get this done while loading from cached values, but ultimately this is the best I could come up with. 
+      //In a team environment, I would have asked for a helping hand with this particular bug.
+      const data = await fetchWithoutCache<Transaction[], RequestByEmployeeParams>(
         "transactionsByEmployee",
         {
           employeeId,
@@ -18,7 +21,7 @@ export function useTransactionsByEmployee(): TransactionsByEmployeeResult {
 
       setTransactionsByEmployee(data)
     },
-    [fetchWithCache]
+    [fetchWithoutCache]
   )
 
   const invalidateData = useCallback(() => {
